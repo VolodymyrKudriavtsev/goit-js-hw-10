@@ -17,4 +17,7 @@ body {
   padding: 8px;
   max-width: 320px;
   margin-bottom: 16px;
+  border-radius: 5px;
+  border-color: #00ffff;
+  outline-color: #6495ed;
 }
