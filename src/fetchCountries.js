@@ -8,4 +8,4 @@ export const fetchCountries = name => {
     });
 };
 
-console.log(fetchCountries('ukr'));
+console.log(fetchCountries('swed'));
