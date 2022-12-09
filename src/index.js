@@ -1,5 +1,6 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { fetchCountries } from './fetchCountries';
 
 const DEBOUNCE_DELAY = 300;
@@ -14,7 +15,6 @@ const getCounrtyListMarkup = ({ flags, name }) => {
   </li>
 `;
 };
-
 const getCounrtyInfoMarkup = ({
   flags,
   name,
@@ -22,7 +22,7 @@ const getCounrtyInfoMarkup = ({
   population,
   languages,
 }) => {
-  console.log(languages);
+  const lang = Object.values(languages).join(', ');
   return `
   <div class="card-title">
     <img src="${flags.svg}" alt="Country flag" width="40" />
@@ -31,18 +31,10 @@ const getCounrtyInfoMarkup = ({
   <ul class="card-list">
     <li class="card-element"><span>Capital:</span>${capital}</li>
     <li class="card-element"><span>Population:</span>${population}</li>
-    <li class="card-element"><span>Languages:</span>${languages}</li>
+    <li class="card-element"><span>Languages:</span>${lang}</li>
   </ul>
   `;
 };
-
-const renderList = () => {
-  // refs.counrtyList.innerHTML = '';
-  // refs.counrtyInfo.innerHTML = '';
-  const list = countries.map(getCounrtyListMarkup);
-  refs.counrtyList.insertAdjacentHTML('beforeend', list.join(''));
-};
-const renderInfo = () => {};
 
 const refs = {
   searchBox: document.querySelector('#search-box'),
@@ -50,22 +42,47 @@ const refs = {
   counrtyInfo: document.querySelector('.country-info'),
 };
 
+const renderList = () => {
+  refs.counrtyList.insertAdjacentHTML(
+    'beforeend',
+    countries.map(getCounrtyListMarkup).join('')
+  );
+};
+const renderInfo = () => {
+  refs.counrtyInfo.insertAdjacentHTML(
+    'beforeend',
+    countries.map(getCounrtyInfoMarkup)
+  );
+};
+
+const render = () => {
+  if (countries.length > 10) {
+    return Notify.info(
+      'Too many matches found. Please enter a more specific name.'
+    );
+  } else if (countries.length < 10 && countries.length >= 2) {
+    renderList();
+  } else {
+    renderInfo();
+  }
+};
+
 const onSearchBoxInput = e => {
   searchBoxValue = e.target.value.trim();
+
   if (searchBoxValue === '') {
     refs.counrtyList.innerHTML = '';
     refs.counrtyInfo.innerHTML = '';
     return;
   }
+
   fetchCountries(searchBoxValue).then(data => {
     countries = data;
-    // render();
+
     refs.counrtyList.innerHTML = '';
     refs.counrtyInfo.innerHTML = '';
-    renderList();
 
-    const info = countries.map(getCounrtyInfoMarkup);
-    refs.counrtyInfo.insertAdjacentHTML('beforeend', info.join(''));
+    render();
   });
 };
 
