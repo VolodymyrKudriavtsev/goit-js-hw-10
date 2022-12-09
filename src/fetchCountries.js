@@ -7,5 +7,3 @@ export const fetchCountries = name => {
       console.log(data);
     });
 };
-
-console.log(fetchCountries('swed'));
