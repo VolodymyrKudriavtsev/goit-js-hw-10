@@ -26,6 +26,7 @@ body {
   list-style: none;
   padding: 10px;
   margin: 0;
+  font-weight: 500;
 }
 
 .card-element,
@@ -33,11 +34,23 @@ body {
   margin-bottom: 5px;
 }
 
-.country-element {
+.country-element,
+.card-title {
   display: flex;
   align-items: center;
 }
 
 img {
   margin-right: 10px;
+}
+
+.card-title {
+  padding: 10px;
+  font-weight: 700;
+  font-size: 30;
+}
+
+.card-element > span {
+  font-weight: 800;
+  margin-right: 5px;
 }
