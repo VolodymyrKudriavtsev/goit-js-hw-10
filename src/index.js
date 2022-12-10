@@ -55,9 +55,13 @@ const renderInfo = () => {
   );
 };
 
-const render = () => {
+const clearHTML = () => {
   refs.counrtyList.innerHTML = '';
   refs.counrtyInfo.innerHTML = '';
+};
+
+const render = () => {
+  clearHTML();
 
   if (countries.length > 10) {
     return Notify.info(
@@ -74,15 +78,13 @@ const onSearchBoxInput = e => {
   searchBoxValue = e.target.value.trim();
 
   if (searchBoxValue === '') {
-    refs.counrtyList.innerHTML = '';
-    refs.counrtyInfo.innerHTML = '';
+    clearHTML();
     return;
   }
 
   fetchCountries(searchBoxValue)
     .then(data => {
       countries = data;
-
       render();
     })
     .catch(() => {
